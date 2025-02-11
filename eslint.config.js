@@ -9,8 +9,11 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginImportX from 'eslint-plugin-import-x'
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import eslintPluginReact from 'eslint-plugin-react'
+import eslintPluginVitest from 'eslint-plugin-vitest'
 import globals from 'globals'
 import * as tseslint from 'typescript-eslint'
+import eslintPluginTestingLibrary from 'eslint-plugin-testing-library'
+import eslintPluginJestDom from 'eslint-plugin-jest-dom'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -130,6 +133,18 @@ const eslintConfig = tseslint.config(
 
 	// Ideally, we want to extends this in Ts + React configs but `next lint` will throw a warning
 	compat.extends('plugin:@next/next/core-web-vitals'),
+
+	/* -------------------------------------------------------------------------- */
+	/*                               Vitest configs                               */
+	/* -------------------------------------------------------------------------- */
+	{
+		file: ['**/*.test.ts?(x)'],
+		extends: [
+			eslintPluginVitest.configs.recommended,
+			eslintPluginTestingLibrary.configs['flat/react'],
+			eslintPluginJestDom.configs['flat/recommended'],
+		],
+	},
 	eslintConfigPrettier,
 )
 
