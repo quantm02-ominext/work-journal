@@ -58,6 +58,17 @@ test('Field should pass readonly to input', async () => {
 	expect(input).toHaveAttribute('readonly')
 })
 
+test('Field shows accessible error message on error', async () => {
+	render(<ComponentUnderTest error="error message" />)
+
+	const input = screen.getByRole('textbox', {
+		name: /label/i,
+	})
+
+	expect(input).not.toHaveAccessibleDescription(/helper text/i)
+	expect(input).toHaveAccessibleDescription(/error message/i)
+})
+
 test('Field can override default element IDs', async () => {
 	const elementIds = {
 		control: 'control',
