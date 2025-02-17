@@ -7,13 +7,13 @@ import eslint from '@eslint/js'
 import tsParser from '@typescript-eslint/parser'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginImportX from 'eslint-plugin-import-x'
+import eslintPluginJestDom from 'eslint-plugin-jest-dom'
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import eslintPluginReact from 'eslint-plugin-react'
+import eslintPluginTestingLibrary from 'eslint-plugin-testing-library'
 import eslintPluginVitest from 'eslint-plugin-vitest'
 import globals from 'globals'
 import * as tseslint from 'typescript-eslint'
-import eslintPluginTestingLibrary from 'eslint-plugin-testing-library'
-import eslintPluginJestDom from 'eslint-plugin-jest-dom'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -40,7 +40,7 @@ const eslintConfig = tseslint.config(
 	{
 		languageOptions: {
 			// eslint default parser only supports stage 4 proposals,
-			// syntax like `import.meta` is currently stage 3
+			// syntax like `import.meta` is currently at stage 3
 			// therefore, we have to use `@typescript-eslint/parser` to parse js file
 			parser: tsParser,
 			ecmaVersion: 'latest',
@@ -131,14 +131,15 @@ const eslintConfig = tseslint.config(
 		},
 	},
 
-	// Ideally, we want to extends this in Ts + React configs but `next lint` will throw a warning
+	// Ideally, we want to extends this in Ts + React configs but `next lint` would throw a warning;
+	// hence, we put it here
 	compat.extends('plugin:@next/next/core-web-vitals'),
 
 	/* -------------------------------------------------------------------------- */
 	/*                               Vitest configs                               */
 	/* -------------------------------------------------------------------------- */
 	{
-		file: ['**/*.test.ts?(x)'],
+		files: ['**/*.test.ts?(x)'],
 		extends: [
 			eslintPluginVitest.configs.recommended,
 			eslintPluginTestingLibrary.configs['flat/react'],
