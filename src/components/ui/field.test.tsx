@@ -6,7 +6,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test } from 'vitest'
 
-import { type ElementIds, Field, type FieldProps, Input } from './field'
+import { type ElementIds, Field, type FieldProps } from './field'
+import { Input } from './input'
 
 const ComponentUnderTest = (props: FieldProps) => {
 	return (

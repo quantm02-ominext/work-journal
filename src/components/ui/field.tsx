@@ -6,8 +6,6 @@ import { useElementIds } from '@/hooks/use-element-ids'
 import { createContext } from '@/lib/context'
 import { boolAttr, cn, combineEventHandlers } from '@/lib/utils'
 
-import { Input as InputPrimitive } from './input'
-
 /* -------------------------------------------------------------------------- */
 /*                                  UseField                                  */
 /* -------------------------------------------------------------------------- */
@@ -198,18 +196,6 @@ const FieldRequiredIndicator = ({
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                 FieldInput                                 */
-/* -------------------------------------------------------------------------- */
-
-type FieldInputProps = React.ComponentPropsWithRef<typeof InputPrimitive>
-
-const FieldInput = ({ onFocus, onBlur, ...props }: FieldInputProps) => {
-	const { getControlProps } = useFieldContext()
-
-	return <InputPrimitive {...getControlProps({ onFocus, onBlur })} {...props} />
-}
-
-/* -------------------------------------------------------------------------- */
 /*                               FieldHelperText                              */
 /* -------------------------------------------------------------------------- */
 
@@ -296,7 +282,6 @@ export {
 	FieldErrorText as ErrorText,
 	Field,
 	FieldHelperText as HelperText,
-	FieldInput as Input,
 	FieldLabel as Label,
 	FieldRequiredIndicator as RequiredIndicator,
 	FieldRoot as Root,
@@ -309,7 +294,6 @@ export type {
 	FieldContextProps,
 	FieldErrorTextProps,
 	FieldHelperTextProps,
-	FieldInputProps,
 	FieldLabelProps,
 	FieldProps,
 	FieldRequiredIndicatorProps,
