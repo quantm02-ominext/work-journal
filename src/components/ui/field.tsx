@@ -219,11 +219,7 @@ const FieldHelperText = ({ className, ...props }: FieldHelperTextProps) => {
 
 type FieldErrorTextProps = React.ComponentPropsWithRef<'p'>
 
-const FieldErrorText = ({
-	children,
-	className,
-	...props
-}: FieldErrorTextProps) => {
+const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
 	const { errorTextProps, error } = useFieldContext()
 
 	if (error) {
@@ -236,7 +232,7 @@ const FieldErrorText = ({
 					className,
 				)}
 			>
-				{children ? children : error}
+				{error}
 			</p>
 		)
 	}
@@ -255,25 +251,18 @@ interface FieldProps extends Omit<FieldRootProps, 'children'> {
 	error?: React.ReactNode
 }
 
-const Field = ({
-	label,
-	helperText,
-	children,
-	required,
-	error,
-	...rootProps
-}: FieldProps) => {
+const Field = ({ label, helperText, children, ...rootProps }: FieldProps) => {
 	return (
-		<FieldRoot {...rootProps} error={error} required={required}>
+		<FieldRoot {...rootProps}>
 			<FieldLabel>
 				{label}
-				{required ? <FieldRequiredIndicator /> : null}
+				<FieldRequiredIndicator />
 			</FieldLabel>
 
 			{children}
 
 			<FieldHelperText>{helperText}</FieldHelperText>
-			<FieldErrorText>{error}</FieldErrorText>
+			<FieldErrorText />
 		</FieldRoot>
 	)
 }
