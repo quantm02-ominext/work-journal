@@ -11,6 +11,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:fix-all": "npm run lint -- --fix --dir .",
     "typecheck": "tsc",
+    "typecheck:all": "npm run typecheck -- --incremental false",
     "format": "prettier --write .",
     "test": "vitest",
     "test:ui": "vitest:ui",

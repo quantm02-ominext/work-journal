@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import { Field, Input } from '@/components/ui/field'
+import { Field } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 
 const GoogleIcon = () => {
