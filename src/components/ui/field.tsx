@@ -1,5 +1,6 @@
 'use client'
 
+import { type FieldMetadata } from '@conform-to/react'
 import * as React from 'react'
 
 import { useElementIds } from '@/hooks/use-element-ids'
@@ -101,7 +102,9 @@ type UseFieldReturn = ReturnType<typeof useField>
 /*                                FieldContext                                */
 /* -------------------------------------------------------------------------- */
 
-type FieldContextProps = UseFieldReturn
+type FieldContextProps = UseFieldReturn & {
+	field?: FieldMetadata
+}
 
 const [FieldContextProvider, useFieldContext] =
 	createContext<FieldContextProps>({
@@ -115,7 +118,9 @@ const [FieldContextProvider, useFieldContext] =
 
 interface FieldRootProps
 	extends UseFieldProps,
-		React.ComponentPropsWithRef<'div'> {}
+		React.ComponentPropsWithRef<'div'> {
+	field?: FieldMetadata
+}
 
 const FieldRoot = ({
 	elementIds,
@@ -125,9 +130,10 @@ const FieldRoot = ({
 	children,
 	readOnly,
 	className,
+	field,
 	...props
 }: FieldRootProps) => {
-	const field = useField({
+	const fieldContext = useField({
 		disabled,
 		error,
 		required,
@@ -136,7 +142,12 @@ const FieldRoot = ({
 	})
 
 	return (
-		<FieldContextProvider value={field}>
+		<FieldContextProvider
+			value={{
+				...fieldContext,
+				field,
+			}}
+		>
 			<div className={cn('flex flex-col gap-2', className)} {...props}>
 				{children}
 			</div>
