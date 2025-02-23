@@ -22,19 +22,19 @@ interface UseFieldProps {
 	required?: boolean
 	disabled?: boolean
 	readOnly?: boolean
-	error?: React.ReactNode
+	invalid?: boolean
+	field?: FieldMetadata
 }
 
 const useField = ({
 	disabled,
 	elementIds: overridingElementIds,
-	error,
-	required,
+	field,
+	required = field?.required,
+	invalid = field?.valid === false,
 	readOnly,
 }: UseFieldProps) => {
 	const [focused, setFocused] = React.useState(false)
-
-	const invalid = Boolean(error)
 
 	const elementIds = useElementIds('field', ['helperText', 'errorText'], {
 		...overridingElementIds,
@@ -90,9 +90,10 @@ const useField = ({
 		errorTextProps,
 		required,
 		disabled,
-		error,
+		invalid,
 		readOnly,
 		focused,
+		field,
 	}
 }
 
@@ -118,36 +119,29 @@ const [FieldContextProvider, useFieldContext] =
 
 interface FieldRootProps
 	extends UseFieldProps,
-		React.ComponentPropsWithRef<'div'> {
-	field?: FieldMetadata
-}
+		React.ComponentPropsWithRef<'div'> {}
 
 const FieldRoot = ({
 	elementIds,
 	required,
 	disabled,
-	error,
 	children,
 	readOnly,
 	className,
 	field,
+	invalid,
 	...props
 }: FieldRootProps) => {
 	const fieldContext = useField({
 		disabled,
-		error,
 		required,
 		readOnly,
 		elementIds,
+		invalid,
 	})
 
 	return (
-		<FieldContextProvider
-			value={{
-				...fieldContext,
-				field,
-			}}
-		>
+		<FieldContextProvider value={fieldContext}>
 			<div className={cn('flex flex-col gap-2', className)} {...props}>
 				{children}
 			</div>
@@ -231,9 +225,9 @@ const FieldHelperText = ({ className, ...props }: FieldHelperTextProps) => {
 type FieldErrorTextProps = React.ComponentPropsWithRef<'p'>
 
 const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
-	const { errorTextProps, error } = useFieldContext()
+	const { errorTextProps, invalid } = useFieldContext()
 
-	if (error) {
+	if (invalid) {
 		return (
 			<p
 				{...errorTextProps}
@@ -242,9 +236,7 @@ const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
 					'inline-flex items-center gap-1 text-xs font-medium text-destructive',
 					className,
 				)}
-			>
-				{error}
-			</p>
+			/>
 		)
 	}
 
@@ -255,16 +247,23 @@ const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
 /*                                    Field                                   */
 /* -------------------------------------------------------------------------- */
 
-interface FieldProps extends Omit<FieldRootProps, 'children'> {
+interface FieldProps extends Omit<FieldRootProps, 'children' | 'invalid'> {
 	label?: React.ReactNode
 	helperText?: React.ReactNode
 	children?: React.ReactNode
 	error?: React.ReactNode
 }
 
-const Field = ({ label, helperText, children, ...rootProps }: FieldProps) => {
+const Field = ({
+	label,
+	helperText,
+	children,
+	field,
+	error = field?.errors?.at(0),
+	...rootProps
+}: FieldProps) => {
 	return (
-		<FieldRoot {...rootProps}>
+		<FieldRoot {...rootProps} invalid={Boolean(error)}>
 			<FieldLabel>
 				{label}
 				<FieldRequiredIndicator />
@@ -273,7 +272,7 @@ const Field = ({ label, helperText, children, ...rootProps }: FieldProps) => {
 			{children}
 
 			<FieldHelperText>{helperText}</FieldHelperText>
-			<FieldErrorText />
+			<FieldErrorText>{error}</FieldErrorText>
 		</FieldRoot>
 	)
 }
