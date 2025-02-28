@@ -23,15 +23,13 @@ interface UseFieldProps {
 	disabled?: boolean
 	readOnly?: boolean
 	invalid?: boolean
-	field?: FieldMetadata
 }
 
 const useField = ({
 	disabled,
 	elementIds: overridingElementIds,
-	field,
-	required = field?.required,
-	invalid = field?.valid === false,
+	required,
+	invalid,
 	readOnly,
 }: UseFieldProps) => {
 	const [focused, setFocused] = React.useState(false)
@@ -93,7 +91,6 @@ const useField = ({
 		invalid,
 		readOnly,
 		focused,
-		field,
 	}
 }
 
@@ -128,7 +125,6 @@ const FieldRoot = ({
 	children,
 	readOnly,
 	className,
-	field,
 	invalid,
 	...props
 }: FieldRootProps) => {
@@ -258,8 +254,7 @@ const Field = ({
 	label,
 	helperText,
 	children,
-	field,
-	error = field?.errors?.at(0),
+	error,
 	...rootProps
 }: FieldProps) => {
 	return (
