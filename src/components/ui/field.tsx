@@ -1,5 +1,6 @@
 'use client'
 
+import { type FieldMetadata } from '@conform-to/react'
 import * as React from 'react'
 
 import { useElementIds } from '@/hooks/use-element-ids'
@@ -21,19 +22,17 @@ interface UseFieldProps {
 	required?: boolean
 	disabled?: boolean
 	readOnly?: boolean
-	error?: React.ReactNode
+	invalid?: boolean
 }
 
 const useField = ({
 	disabled,
 	elementIds: overridingElementIds,
-	error,
 	required,
+	invalid,
 	readOnly,
 }: UseFieldProps) => {
 	const [focused, setFocused] = React.useState(false)
-
-	const invalid = Boolean(error)
 
 	const elementIds = useElementIds('field', ['helperText', 'errorText'], {
 		...overridingElementIds,
@@ -89,7 +88,7 @@ const useField = ({
 		errorTextProps,
 		required,
 		disabled,
-		error,
+		invalid,
 		readOnly,
 		focused,
 	}
@@ -101,7 +100,9 @@ type UseFieldReturn = ReturnType<typeof useField>
 /*                                FieldContext                                */
 /* -------------------------------------------------------------------------- */
 
-type FieldContextProps = UseFieldReturn
+type FieldContextProps = UseFieldReturn & {
+	field?: FieldMetadata
+}
 
 const [FieldContextProvider, useFieldContext] =
 	createContext<FieldContextProps>({
@@ -121,22 +122,22 @@ const FieldRoot = ({
 	elementIds,
 	required,
 	disabled,
-	error,
 	children,
 	readOnly,
 	className,
+	invalid,
 	...props
 }: FieldRootProps) => {
-	const field = useField({
+	const fieldContext = useField({
 		disabled,
-		error,
 		required,
 		readOnly,
 		elementIds,
+		invalid,
 	})
 
 	return (
-		<FieldContextProvider value={field}>
+		<FieldContextProvider value={fieldContext}>
 			<div className={cn('flex flex-col gap-2', className)} {...props}>
 				{children}
 			</div>
@@ -220,9 +221,9 @@ const FieldHelperText = ({ className, ...props }: FieldHelperTextProps) => {
 type FieldErrorTextProps = React.ComponentPropsWithRef<'p'>
 
 const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
-	const { errorTextProps, error } = useFieldContext()
+	const { errorTextProps, invalid } = useFieldContext()
 
-	if (error) {
+	if (invalid) {
 		return (
 			<p
 				{...errorTextProps}
@@ -231,9 +232,7 @@ const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
 					'inline-flex items-center gap-1 text-xs font-medium text-destructive',
 					className,
 				)}
-			>
-				{error}
-			</p>
+			/>
 		)
 	}
 
@@ -244,16 +243,22 @@ const FieldErrorText = ({ className, ...props }: FieldErrorTextProps) => {
 /*                                    Field                                   */
 /* -------------------------------------------------------------------------- */
 
-interface FieldProps extends Omit<FieldRootProps, 'children'> {
+interface FieldProps extends Omit<FieldRootProps, 'children' | 'invalid'> {
 	label?: React.ReactNode
 	helperText?: React.ReactNode
 	children?: React.ReactNode
 	error?: React.ReactNode
 }
 
-const Field = ({ label, helperText, children, ...rootProps }: FieldProps) => {
+const Field = ({
+	label,
+	helperText,
+	children,
+	error,
+	...rootProps
+}: FieldProps) => {
 	return (
-		<FieldRoot {...rootProps}>
+		<FieldRoot {...rootProps} invalid={Boolean(error)}>
 			<FieldLabel>
 				{label}
 				<FieldRequiredIndicator />
@@ -262,7 +267,7 @@ const Field = ({ label, helperText, children, ...rootProps }: FieldProps) => {
 			{children}
 
 			<FieldHelperText>{helperText}</FieldHelperText>
-			<FieldErrorText />
+			<FieldErrorText>{error}</FieldErrorText>
 		</FieldRoot>
 	)
 }
