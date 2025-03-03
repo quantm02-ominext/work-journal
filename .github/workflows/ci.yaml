@@ -1,0 +1,82 @@
+name: Verify
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+concurrency:
+  # Limit the concurrency of the workflow runs for a specific branch
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: 📥 Install depedencies
+        run: npm ci
+
+      - name: 🔎 Type check
+        run: npm run typecheck:all
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: 📥 Install depedencies
+        run: npm ci
+
+      - name: 🔬 Lint
+        run: npm run lint
+
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: 📥 Install depedencies
+        run: npm ci
+
+      - name: 📏 format Lint
+        run: npm run format-check
+
+  vitest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: 📥 Install depedencies
+        run: npm ci
+
+      - name: ⚡ Run vitest
+        run: npm run test:coverage
