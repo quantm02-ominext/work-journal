@@ -8,8 +8,10 @@ import { useActionState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { getFieldProps, getInputProps } from '@/lib/form'
 
-import { schema, signup } from './actions'
+import { signup } from './actions'
+import { schema } from './schema'
 
 export const SignUpForm = () => {
 	const [lastResult, action] = useActionState(signup, undefined)
@@ -25,23 +27,30 @@ export const SignUpForm = () => {
 
 	return (
 		<Form className="space-y-4" action={action} {...getFormProps(form)}>
-			<Field label="Email" required>
-				<Input type="email" placeholder="Enter your email" className="h-10" />
-			</Field>
-
-			<Field label="Password" required>
+			<Field label="Email" {...getFieldProps(fields.email)}>
 				<Input
-					type="password"
-					placeholder="Create a strong password"
+					placeholder="Enter your email"
 					className="h-10"
+					{...getInputProps(fields.email, { type: 'email' })}
 				/>
 			</Field>
 
-			<Field label="Confirm Password" required>
+			<Field label="Password" {...getFieldProps(fields.password)}>
 				<Input
-					type="password"
+					placeholder="Create a strong password"
+					className="h-10"
+					{...getInputProps(fields.password, { type: 'password' })}
+				/>
+			</Field>
+
+			<Field
+				label="Confirm Password"
+				{...getFieldProps(fields.confirmPassword)}
+			>
+				<Input
 					placeholder="Confirm your password"
 					className="h-10"
+					{...getInputProps(fields.confirmPassword, { type: 'password' })}
 				/>
 			</Field>
 
