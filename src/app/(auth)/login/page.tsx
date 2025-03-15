@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import { Field } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+
+import { LoginForm } from './login-form'
 
 const GoogleIcon = () => {
 	return (
@@ -34,27 +34,7 @@ export default function Login() {
 					</p>
 				</div>
 
-				<form className="space-y-4">
-					<Field label="Email" required>
-						<Input
-							type="email"
-							placeholder="Enter your email"
-							className="h-10"
-						/>
-					</Field>
-
-					<Field label="Password" required>
-						<Input
-							type="password"
-							placeholder="Enter your password"
-							className="h-10"
-						/>
-					</Field>
-
-					<Button className="w-full" size={'lg'}>
-						Sign in
-					</Button>
-				</form>
+				<LoginForm />
 
 				<div className="relative">
 					<Separator />
