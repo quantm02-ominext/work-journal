@@ -5,6 +5,8 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
+import { useFieldContext } from './field'
+
 export interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
 	startElement?: React.ReactNode
 	endElement?: React.ReactNode
@@ -21,10 +23,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 			asChild = false,
 			disabled,
 			wrapperProps,
+			onFocus,
+			onBlur,
 			...props
 		},
 		ref,
 	) => {
+		const fieldContext = useFieldContext(false)
+
 		const Comp = asChild ? Slot : 'input'
 
 		return (
@@ -52,6 +58,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					)}
 					ref={ref}
 					disabled={disabled}
+					{...fieldContext?.getControlProps({
+						onBlur,
+						onFocus,
+					})}
 					{...props}
 				/>
 				{endElement && (
