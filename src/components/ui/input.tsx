@@ -10,18 +10,14 @@ export interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
 	endElement?: React.ReactNode
 	asChild?: boolean
 	wrapperProps?: React.ComponentPropsWithoutRef<'div'>
-	startElementProps?: React.ComponentPropsWithoutRef<'div'>
-	endElementProps?: React.ComponentPropsWithoutRef<'div'>
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	(
 		{
 			className,
 			startElement,
 			endElement,
-			startElementProps,
-			endElementProps,
 			asChild = false,
 			disabled,
 			wrapperProps,
@@ -41,11 +37,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 			>
 				{startElement && (
 					<div
-						{...startElementProps}
 						className={cn(
 							'flex min-w-10 shrink-0 items-center justify-center px-3 text-muted-foreground',
 							disabled && 'cursor-not-allowed opacity-50',
-							startElementProps?.className,
 						)}
 					>
 						{startElement}
@@ -62,11 +56,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				/>
 				{endElement && (
 					<div
-						{...endElementProps}
 						className={cn(
 							'flex min-w-10 shrink-0 items-center justify-center px-3 text-muted-foreground',
 							disabled && 'cursor-not-allowed opacity-50',
-							endElementProps?.className,
 						)}
 					>
 						{endElement}
@@ -77,5 +69,3 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	},
 )
 Input.displayName = 'Input'
-
-export { Input }
