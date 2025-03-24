@@ -68,9 +68,9 @@ test('useControllableState supports controlled state', async () => {
 	expect(result.current.controlledValue).toBe(newValue)
 	expect(result.current.controllableStateValue).toBe(newValue)
 
-	const newValue2 = faker.string.sample()
-	act(() => result.current.setControlledValue(newValue2))
+	const newControlledValue = faker.string.sample()
+	act(() => result.current.setControlledValue(newControlledValue))
 
 	expect(onChange).toHaveBeenCalledTimes(1)
-	expect(result.current.controllableStateValue).toBe(newValue2)
+	expect(result.current.controllableStateValue).toBe(newControlledValue)
 })
