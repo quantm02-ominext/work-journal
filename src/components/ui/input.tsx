@@ -37,14 +37,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 			<div
 				{...wrapperProps}
 				className={cn(
-					'flex w-full rounded-md border border-input bg-background text-sm ring-offset-background focus-within:ring-1 focus-within:ring-ring',
+					'flex w-full rounded-md border border-input bg-background text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1',
 					wrapperProps?.className,
 				)}
 			>
 				{startElement && (
 					<div
 						className={cn(
-							'flex min-w-10 shrink-0 items-center justify-center px-3 text-muted-foreground',
+							'flex min-w-10 shrink-0 items-center justify-center text-muted-foreground',
 							disabled && 'cursor-not-allowed opacity-50',
 						)}
 					>
@@ -67,7 +67,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 				{endElement && (
 					<div
 						className={cn(
-							'flex min-w-10 shrink-0 items-center justify-center px-3 text-muted-foreground',
+							'flex min-w-10 shrink-0 items-center justify-center text-muted-foreground',
 							disabled && 'cursor-not-allowed opacity-50',
 						)}
 					>
